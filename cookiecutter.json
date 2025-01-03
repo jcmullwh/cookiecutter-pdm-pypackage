@@ -3,7 +3,7 @@
     "email": "king.arthur@camelot.bt",
     "github_username": "king-arthur",
     "project_name": "Holy Grail",
-    "dist_name": "{{cookiecutter.project_name.lower().replace(' ', '-')}}",
+    "dist_name": "{{cookiecutter.project_name.lower().replace(' ', '_')}}",
     "package_name": "{{cookiecutter.dist_name.replace('-', '_')}}",
     "project_short_description": "",
     "repository_name": "{{cookiecutter.github_username}}/{{cookiecutter.dist_name}}",
