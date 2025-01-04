@@ -115,16 +115,8 @@ docs = [
 [tool.pdm.scripts]
 test = "pytest"
 test-cov-xml = "pytest --cov-report=xml"
-lint = [
-  "ruff format .",
-  "ruff --fix .",
-  "mypy {{ cookiecutter.package_name }}/",
-]
-lint-check = [
-  "ruff format --check .",
-  "ruff .",
-  "mypy {{ cookiecutter.package_name }}/",
-]
+lint = "scripts/lint.py"
+lint-check = "scripts/lint-check.py"
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"
 
