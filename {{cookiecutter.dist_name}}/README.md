@@ -5,7 +5,7 @@
 </p>
 
 [![build]({{cookiecutter.repository_url}}/workflows/Build/badge.svg)]({{cookiecutter.repository_url}}/actions)
-[![codecov](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/master/graph/badge.svg)](https://codecov.io/gh/{{cookiecutter.repository_name}})
+[![codecov](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/master/graph/badge.svg)](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/master)
 [![PyPI version](https://badge.fury.io/py/{{cookiecutter.dist_name}}.svg)](https://badge.fury.io/py/{{cookiecutter.dist_name}})
 
 ---
@@ -17,57 +17,86 @@
 ---
 
 ## Development
+### Setup Environment
+We use PDM to manage the development environment and production build. Ensure it's installed on your system.
 
-### Setup environment
+### Install PDM
+You can install PDM via pip:
+```
+pip install pdm
+```
+Alternatively, follow the official installation guide.
 
-We use [Hatch](https://hatch.pypa.io/latest/install/) to manage the development environment and production build. Ensure it's installed on your system.
+### Initialize the Project
+After installing PDM, install the project dependencies and set up the environment:
+```
+pdm install
+```
 
-### Run unit tests
-
+### Run Unit Tests
 You can run all the tests with:
-
-```bash
-hatch run test
+```
+pdm run test
+```
+To generate a coverage report in XML format:
+```
+pdm run test-cov-xml
 ```
 
-### Format the code
-
+### Format the Code
 Execute the following command to apply linting and check typing:
-
-```bash
-hatch run lint
+```
+pdm run lint
+```
+To perform a lint check without making changes:
+```
+pdm run lint-check
 ```
 
-### Publish a new version
-
-You can bump the version, create a commit and associated tag with one command:
-
-```bash
-hatch version patch
+### Publish a New Version
+You can bump the version, create a commit, and associated tag with one command using PDM:
+```
+pdm run bump-patch
+pdm run bump-minor
+pdm run bump-major
 ```
 
-```bash
-hatch version minor
+
+### Build the Project
+To build the project, use:
+```
+pdm build
 ```
 
-```bash
-hatch version major
+### Serve the Documentation
+You can serve the MkDocs documentation with:
+```
+pdm run docs-serve
+```
+It will automatically watch for changes in your code.
+
+To build the static documentation site:
+```
+pdm run docs-build
 ```
 
-Your default Git text editor will open so you can add information about the release.
+### Additional Scripts
+PDM allows you to define custom scripts in your pyproject.toml. Here are the available scripts:
 
-When you push the tag on GitHub, the workflow will automatically publish it on PyPi and a GitHub release will be created as draft.
-
-## Serve the documentation
-
-You can serve the Mkdocs documentation with:
-
-```bash
-hatch run docs-serve
+test: Runs the unit tests.
+test-cov-xml: Runs tests with coverage report in XML format.
+lint: Applies linting and type checking.
+lint-check: Checks linting without making changes.
+docs-serve: Serves the documentation locally.
+docs-build: Builds the static documentation site.
+You can execute any of these scripts using:
+```
+pdm run <script-name>
+```
+For example:
+```
+pdm run lint
 ```
 
-It'll automatically watch for changes in your code.
-
-## License
-
+### License
 This project is licensed under the terms of the {{cookiecutter.open_source_license}}.

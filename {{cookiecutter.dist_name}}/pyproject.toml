@@ -103,7 +103,8 @@ dev = [
   "mypy>=1.10.0",
   "ruff>=0.4.3",
   "pre-commit>=3.7.0",
-  "tox>=4.15.0"
+  "tox>=4.15.0",
+  "pdm-bump>=0.9.10"
 ]
 {% if cookiecutter.mkdocs == "Y" -%}
 docs = [
@@ -121,6 +122,9 @@ lint = "scripts/lint.py"
 lint-check = "scripts/lint-check.py"
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"
+bump-patch = "bump2version patch"
+bump-minor = "bump2version minor"
+bump-major = "bump2version major"
 
 [tool.pdm.build]
 # excludes = ["./**/.git"]
