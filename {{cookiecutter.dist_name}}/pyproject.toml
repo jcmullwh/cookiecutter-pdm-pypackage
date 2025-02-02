@@ -128,7 +128,7 @@ bump-major = "bump2version major"
 
 [tool.pdm.build]
 # excludes = ["./**/.git"]
-# package-dir = "."
+package-dir = "src"
 includes = ["{{cookiecutter.package_name}}"]
 
 [build-system]
