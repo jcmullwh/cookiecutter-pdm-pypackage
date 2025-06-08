@@ -1,6 +1,8 @@
 """{{cookiecutter.project_short_description}}"""
 
-__version__ = "0.0.0"
+from importlib.metadata import version
+
+__version__ = version(__package__ or __name__)
 
 
 def add(a: int, b: int) -> int:
