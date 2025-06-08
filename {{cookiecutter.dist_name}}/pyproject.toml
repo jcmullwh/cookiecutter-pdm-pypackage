@@ -17,6 +17,9 @@ dependencies = [
 Documentation = "{{ cookiecutter.docs_url }}"
 Source = "{{ cookiecutter.repository_url }}"
 
+[tool.pdm.version]
+source = "scm"
+
 
 [tool.mypy]
 files = ["{{cookiecutter.package_name}}"]
