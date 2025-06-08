@@ -99,4 +99,5 @@ pdm run lint
 ```
 
 ### License
-This project is licensed under the terms of the {{cookiecutter.open_source_license}}.
+This project is licensed under the terms of the {{cookiecutter.open_source_license}}
+
