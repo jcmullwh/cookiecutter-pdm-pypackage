@@ -8,7 +8,7 @@ jobs:
     runs-on: {% raw %}${{ matrix.os }}{% endraw %}
     strategy:
       matrix:
-        os: ["ubuntu-latest, "windows-latest", "macos-latest"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         python_version: ['{{ cookiecutter.python_version }}']
 
     steps:
@@ -57,7 +57,7 @@ jobs:
       with:
         skip_existing: true
         user: __token__
-        password: {% raw %}${{ secrets.TEST_PYPI_SECRECT }}{% endraw %}
+        password: {% raw %}${{ secrets.TEST_PYPI_SECRET }}{% endraw %}
         packages-dir: dist/
         repository-url: https://test.pypi.org/legacy/
     - name: Publish 📦 to PyPI
@@ -65,5 +65,7 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
-        password: {% raw %}${{ secrets.PYPI_SECRECT }}{% endraw %}
+        password: {% raw %}${{ secrets.PYPI_SECRET }}{% endraw %}
         packages-dir: dist/
+        skip_existing: true
+
