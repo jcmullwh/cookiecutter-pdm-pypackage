@@ -122,9 +122,9 @@ lint = "scripts/lint.py"
 lint-check = "scripts/lint-check.py"
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"
-bump-patch = "bump2version patch"
-bump-minor = "bump2version minor"
-bump-major = "bump2version major"
+bump-patch = "pdm bump patch"
+bump-minor = "pdm bump minor"
+bump-major = "pdm bump major"
 
 [tool.pdm.build]
 # excludes = ["./**/.git"]
