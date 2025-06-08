@@ -60,6 +60,7 @@ pdm run bump-patch
 pdm run bump-minor
 pdm run bump-major
 ```
+The project version is derived from Git tags via the `pdm-bump` plugin, so tagging a release automatically updates the package version.
 
 
 ### Build the Project
