@@ -68,6 +68,17 @@ Thumbs.db
 def make_initial_commit():
     """Make the initial Git commit."""
     print("Making initial Git commit...")
+    # Configure Git user if not already configured
+    try:
+        subprocess.run(["git", "config", "user.name"], check=True, capture_output=True)
+    except subprocess.CalledProcessError:
+        run_command(["git", "config", "user.name", "{{ cookiecutter.full_name }}"])
+    
+    try:
+        subprocess.run(["git", "config", "user.email"], check=True, capture_output=True)
+    except subprocess.CalledProcessError:
+        run_command(["git", "config", "user.email", "{{ cookiecutter.email }}"])
+    
     run_command(["git", "add", "."])
     run_command(["git", "commit", "-m", "Initial commit"])
 
@@ -87,6 +98,15 @@ def main():
     else:
         print("Git is already installed.")
 
+    # Initialize Git repository FIRST (required for SCM version detection)
+    # Check if the current directory is already a Git repository
+    if not os.path.isdir(os.path.join(os.getcwd(), ".git")):
+        initialize_git_repo()
+        create_gitignore()
+        make_initial_commit()
+    else:
+        print("Git repository already initialized. Skipping Git setup.")
+
     # Ensure PDM is installed
     if not is_pdm_installed():
         install_pdm()
@@ -98,15 +118,6 @@ def main():
 
     # Add the current project as an editable dev dependency
     run_command(["pdm", "add", "--dev", "--editable", "."])
-
-    # Initialize Git repository
-    # Check if the current directory is already a Git repository
-    if not os.path.isdir(os.path.join(os.getcwd(), ".git")):
-        initialize_git_repo()
-        create_gitignore()
-        make_initial_commit()
-    else:
-        print("Git repository already initialized. Skipping Git setup.")
 
 if __name__ == "__main__":
     try:

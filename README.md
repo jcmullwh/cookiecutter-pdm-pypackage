@@ -19,7 +19,7 @@ Cookiecutter template for a cutting-edge Python package: pdm, ruff, mypy, GitHub
 Generate the project:
 
 ```bash
-cookiecutter https://github.com/Aviksaikat/cookiecutter-pdm-pypackage
+cookiecutter https://github.com/jcmullwh/cookiecutter-pdm-pypackage
 ```
 
 The generator will automatically call `pdm install` at the end.
@@ -37,7 +37,7 @@ Then, for the `GitHub Actions pipelines` to work correctly, you should:
 [cruft](https://github.com/cruft/cruft) is a layer above Cookiecutter allowing you to update your project from the template after it has been generated.
 
 ```bash
-cruft create https://github.com/Aviksaikat/cookiecutter-pdm-pypackage
+cruft create https://github.com/jcmullwh/cookiecutter-pdm-pypackage
 ```
 
 ## Demo
@@ -46,4 +46,4 @@ cruft create https://github.com/Aviksaikat/cookiecutter-pdm-pypackage
 
 ## License
 
-This project is licensed under the terms of the [MIT](https://github.com/Aviksaikat/cookiecutter-pdm-pypackage/blob/main/LICENSE) license.
+This project is licensed under the terms of the [MIT](https://github.com/jcmullwh/cookiecutter-pdm-pypackage/blob/main/LICENSE) license.

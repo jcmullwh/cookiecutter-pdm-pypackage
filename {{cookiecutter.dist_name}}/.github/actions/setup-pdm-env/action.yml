@@ -11,14 +11,14 @@ runs:
   using: "composite"
   steps:
     - name: Set up python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: {% raw %}${{ inputs.python-version }}{% endraw %}
 
     - name: Install PDM
       uses: pdm-project/setup-pdm@v3
       with:
-        python-version: 3.9
+        python-version: {% raw %}${{ inputs.python-version }}{% endraw %}
         cache: true
 
     - name: Install dependencies

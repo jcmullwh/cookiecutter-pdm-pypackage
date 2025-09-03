@@ -1,3 +1,4 @@
+{% if cookiecutter.codecov == "Y" -%}
 coverage:
   range: 70..100
   round: down
@@ -7,3 +8,4 @@ coverage:
       default:
         target: 90%
         threshold: 0.5%
+{%- endif %}
