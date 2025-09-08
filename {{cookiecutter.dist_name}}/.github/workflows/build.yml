@@ -19,6 +19,19 @@ jobs:
         python-version: {% raw %}${{ matrix.python_version }}{% endraw %}
     - name: Set up the environment
       uses: ./.github/actions/setup-pdm-env
+{% if cookiecutter.brave_browser_support == "Y" -%}
+    - name: Setup Brave Browser (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        wget -q -O - https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg | sudo apt-key add -
+        echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+        sudo apt update
+        sudo apt install -y brave-browser
+    - name: Setup Brave Browser (macOS)  
+      if: matrix.os == 'macos-latest'
+      run: |
+        brew install --cask brave-browser
+{%- endif %}
     - name: Lint and typecheck
       run: |
         pdm run lint-check

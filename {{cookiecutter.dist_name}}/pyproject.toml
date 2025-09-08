@@ -11,6 +11,11 @@ classifiers = [
 ]
 requires-python = ">={{ cookiecutter.python_version }}"
 dependencies = [
+{% if cookiecutter.brave_browser_support == "Y" -%}
+  "selenium>=4.15.0",
+  "webdriver-manager>=4.0.0",
+  "requests>=2.31.0",
+{%- endif %}
 ]
 
 [project.urls]

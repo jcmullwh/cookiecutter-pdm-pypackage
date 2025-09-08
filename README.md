@@ -13,6 +13,7 @@ Cookiecutter template for a cutting-edge Python package: pdm, ruff, mypy, GitHub
 * [X] Automate and standardize testing with [`tox`](https://tox.wiki/en/4.15.0/)
 * [X] Documentation with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) and docstring reference support with [mkdocstrings](https://mkdocstrings.github.io/).
 * [X] Ready-to-use [GitHub Actions](https://help.github.com/en/actions/automating-your-workflow-with-github-actions) pipelines
+* [X] **NEW:** Optional Brave browser integration support with automated testing and browser automation utilities
 
 ## Quickstart
 

@@ -4,6 +4,18 @@ from importlib.metadata import version
 
 __version__ = version(__package__ or __name__)
 
+{% if cookiecutter.brave_browser_support == "Y" -%}
+# Brave browser integration
+try:
+    from .brave_integration import BraveSession, check_brave_rewards_api, get_brave_user_agent
+    __all__ = ["add", "BraveSession", "check_brave_rewards_api", "get_brave_user_agent"]
+except ImportError:
+    # Brave dependencies not installed
+    __all__ = ["add"]
+{%- else -%}
+__all__ = ["add"]
+{%- endif %}
+
 
 def add(a: int, b: int) -> int:
     """

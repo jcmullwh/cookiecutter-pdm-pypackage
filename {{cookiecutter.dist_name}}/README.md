@@ -15,6 +15,40 @@
 **Source Code**: <a href="{{cookiecutter.repository_url}}" target="_blank">{{cookiecutter.repository_url}}</a>
 
 ---
+{% if cookiecutter.brave_browser_support == "Y" -%}
+
+## Brave Browser Integration
+
+This package includes built-in support for Brave browser automation and integration. Features include:
+
+- **BraveSession**: A context manager for easy Brave browser automation using Selenium
+- **Brave Rewards API checking**: Utilities to detect Brave Rewards support on websites
+- **Brave-compatible user agent**: Get proper user agent strings for Brave browser
+- **CI/CD support**: Automated testing with Brave browser in GitHub Actions
+
+### Quick Example
+
+```python
+from {{cookiecutter.package_name}} import BraveSession, check_brave_rewards_api
+
+# Use Brave browser for automation
+with BraveSession(headless=True) as driver:
+    driver.get("https://example.com")
+    print(driver.title)
+
+# Check if a site supports Brave Rewards
+supports_rewards = check_brave_rewards_api("https://brave.com")
+print(f"Supports Brave Rewards: {supports_rewards}")
+```
+
+### Requirements
+
+For Brave browser features, install the optional dependencies:
+```bash
+pip install selenium webdriver-manager requests
+```
+
+{%- endif %}
 
 ## Development
 ### Setup Environment
