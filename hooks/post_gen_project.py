@@ -79,6 +79,32 @@ def make_initial_commit():
     run_command(["git", "add", "."])
     run_command(["git", "commit", "-m", "Initial commit"])
 
+def cleanup_brave_files():
+    """Remove Brave browser integration files if not needed."""
+    print(f"Checking Brave support option: '{{ cookiecutter.brave_browser_support }}'")
+    if "{{ cookiecutter.brave_browser_support }}" != "Y":
+        print("Brave browser support disabled. Cleaning up related files...")
+        
+        # Remove brave integration module
+        brave_module = os.path.join("src", "{{ cookiecutter.package_name }}", "brave_integration.py")
+        print(f"Checking for file: {brave_module}")
+        if os.path.exists(brave_module):
+            os.remove(brave_module)
+            print(f"Removed {brave_module}")
+        else:
+            print(f"File {brave_module} not found")
+        
+        # Remove brave integration tests  
+        brave_tests = os.path.join("tests", "test_brave_integration.py")
+        print(f"Checking for file: {brave_tests}")
+        if os.path.exists(brave_tests):
+            os.remove(brave_tests)
+            print(f"Removed {brave_tests}")
+        else:
+            print(f"File {brave_tests} not found")
+    else:
+        print("Brave browser support enabled. Keeping related files.")
+
 def run_command(command, shell=False):
     """Utility function to run a shell command."""
     print(f"Running command: {' '.join(command) if isinstance(command, list) else command}")
@@ -94,6 +120,9 @@ def main():
         sys.exit(1)
     else:
         print("Git is already installed.")
+    
+    # Clean up conditional files first
+    cleanup_brave_files()
     
     # Initialize Git repository first (needed for SCM versioning)
     if not os.path.isdir(os.path.join(os.getcwd(), ".git")):
