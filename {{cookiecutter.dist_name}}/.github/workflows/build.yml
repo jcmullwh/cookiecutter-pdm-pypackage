@@ -12,24 +12,29 @@ jobs:
         python_version: ['{{ cookiecutter.python_version }}']
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: {% raw %}${{ matrix.python_version }}{% endraw %}
-    - name: Set up the environment
-      uses: ./.github/actions/setup-pdm-env
-    - name: Lint and typecheck
-      run: |
-        pdm run lint-check
-    - name: Test
-      run: |
-        pdm run test-cov-xml
-    - uses: codecov/codecov-action@v4
-      with:
-        token: {% raw %}${{ secrets.CODECOV_TOKEN }}{% endraw %}
-        fail_ci_if_error: true
-        verbose: true
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: {% raw %}${{ matrix.python_version }}{% endraw %}
+      - name: Set up the environment
+        uses: ./.github/actions/setup-pdm-env
+        with:
+          python-version: {% raw %}${{ matrix.python_version }}{% endraw %}
+      - name: Lint and typecheck
+        run: |
+          pdm run lint-check
+      - name: Test
+        run: |
+          pdm run {% if cookiecutter.codecov == "Y" %}test-cov-xml{% else %}test{% endif %}
+{% if cookiecutter.codecov == "Y" %}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: {% raw %}${{ secrets.CODECOV_TOKEN }}{% endraw %}
+          fail_ci_if_error: true
+          verbose: true
+{% endif %}
 
   release:
     runs-on: ubuntu-latest
@@ -37,35 +42,30 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
-        contents: write
-        id-token: write
+      contents: write
+      id-token: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '{{ cookiecutter.python_version }}'
-    - name: Set up the environment
-      uses: ./.github/actions/setup-pdm-env
-    - name: Build
-      run: |
-        pdm build
-    - name: Publish 📦 to Test PyPI
-      if: startsWith(github.ref, 'refs/heads/main')
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        skip_existing: true
-        user: __token__
-        password: {% raw %}${{ secrets.TEST_PYPI_SECRET }}{% endraw %}
-        packages-dir: dist/
-        repository-url: https://test.pypi.org/legacy/
-    - name: Publish 📦 to PyPI
-      if: startsWith(github.ref, 'refs/heads/main')
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: {% raw %}${{ secrets.PYPI_SECRET }}{% endraw %}
-        packages-dir: dist/
-        skip_existing: true
-
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '{{ cookiecutter.python_version }}'
+      - name: Set up the environment
+        uses: ./.github/actions/setup-pdm-env
+        with:
+          python-version: '{{ cookiecutter.python_version }}'
+      - name: Build
+        run: |
+          pdm build
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip_existing: true
+          packages-dir: dist/
+          repository-url: https://test.pypi.org/legacy/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          skip_existing: true

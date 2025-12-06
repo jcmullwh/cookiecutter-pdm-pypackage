@@ -1,8 +1,11 @@
 """{{cookiecutter.project_short_description}}"""
 
-from importlib.metadata import version
+from importlib import metadata
 
-__version__ = version(__package__ or __name__)
+try:
+    __version__ = metadata.version(__package__ or __name__)
+except metadata.PackageNotFoundError:
+    __version__ = "0.0.0"
 
 
 def add(a: int, b: int) -> int:

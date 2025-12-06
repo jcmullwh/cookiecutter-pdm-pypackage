@@ -14,7 +14,9 @@ dependencies = [
 ]
 
 [project.urls]
+{% if cookiecutter.mkdocs == "Y" -%}
 Documentation = "{{ cookiecutter.docs_url }}"
+{%- endif %}
 Source = "{{ cookiecutter.repository_url }}"
 
 [tool.pdm.version]
@@ -23,13 +25,13 @@ source = "scm"
 
 [tool.mypy]
 files = ["{{cookiecutter.package_name}}"]
-disallow_untyped_defs = "True"
-disallow_any_unimported = "True"
-no_implicit_optional = "True"
-check_untyped_defs = "True"
-warn_return_any = "True"
-warn_unused_ignores = "True"
-show_error_codes = "True"
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
 
 
 [tool.ruff]
@@ -83,9 +85,9 @@ ignore = [
 "tests/*" = ["S101","PLR2004"]
 
 [tool.pytest.ini_options]
-addopts = "--cov={{ cookiecutter.package_name }}/ --cov-report=term-missing"
+addopts = "{% if cookiecutter.codecov == 'Y' %}--cov={{ cookiecutter.package_name }}/ --cov-report=term-missing{% else %}-ra{% endif %}"
 {% if cookiecutter.asyncio == "Y" -%}
-  asyncio_mode = "strict"
+asyncio_mode = "strict"
 {%- endif %}
 
 
@@ -104,7 +106,7 @@ dev = [
   "deptry>=0.16.1",
 {% endif -%}
   "mypy>=1.10.0",
-  "ruff>=0.4.3",
+  "ruff>=0.6.9",
   "pre-commit>=3.7.0",
   "tox>=4.15.0",
   "pdm-bump>=0.9.10"
@@ -120,11 +122,15 @@ docs = [
 
 [tool.pdm.scripts]
 test = "pytest"
+{% if cookiecutter.codecov == "Y" -%}
 test-cov-xml = "pytest --cov-report=xml"
+{%- endif %}
 lint = "scripts/lint.py"
 lint-check = "scripts/lint-check.py"
+{% if cookiecutter.mkdocs == "Y" -%}
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"
+{%- endif %}
 bump-patch = "pdm bump patch"
 bump-minor = "pdm bump minor"
 bump-major = "pdm bump major"

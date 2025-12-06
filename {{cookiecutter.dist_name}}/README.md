@@ -5,13 +5,15 @@
 </p>
 
 [![build]({{cookiecutter.repository_url}}/workflows/Build/badge.svg)]({{cookiecutter.repository_url}}/actions)
-[![codecov](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/master/graph/badge.svg)](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/master)
+{% if cookiecutter.codecov == "Y" -%}
+[![codecov](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/main/graph/badge.svg)](https://codecov.io/gh/{{cookiecutter.repository_name}}/branch/main)
+{%- endif %}
 [![PyPI version](https://badge.fury.io/py/{{cookiecutter.dist_name}}.svg)](https://badge.fury.io/py/{{cookiecutter.dist_name}})
 
 ---
-
+{% if cookiecutter.mkdocs == "Y" -%}
 **Documentation**: <a href="{{cookiecutter.docs_url}}" target="_blank">{{cookiecutter.docs_url}}</a>
-
+{% endif -%}
 **Source Code**: <a href="{{cookiecutter.repository_url}}" target="_blank">{{cookiecutter.repository_url}}</a>
 
 ---
@@ -38,10 +40,12 @@ You can run all the tests with:
 ```
 pdm run test
 ```
+{% if cookiecutter.codecov == "Y" -%}
 To generate a coverage report in XML format:
 ```
 pdm run test-cov-xml
 ```
+{%- endif %}
 
 ### Format the Code
 Execute the following command to apply linting and check typing:
@@ -69,6 +73,7 @@ To build the project, use:
 pdm build
 ```
 
+{% if cookiecutter.mkdocs == "Y" -%}
 ### Serve the Documentation
 You can serve the MkDocs documentation with:
 ```
@@ -80,16 +85,21 @@ To build the static documentation site:
 ```
 pdm run docs-build
 ```
+{%- endif %}
 
 ### Additional Scripts
 PDM allows you to define custom scripts in your pyproject.toml. Here are the available scripts:
 
 test: Runs the unit tests.
+{% if cookiecutter.codecov == "Y" -%}
 test-cov-xml: Runs tests with coverage report in XML format.
+{%- endif %}
 lint: Applies linting and type checking.
 lint-check: Checks linting without making changes.
+{% if cookiecutter.mkdocs == "Y" -%}
 docs-serve: Serves the documentation locally.
 docs-build: Builds the static documentation site.
+{%- endif %}
 You can execute any of these scripts using:
 ```
 pdm run <script-name>

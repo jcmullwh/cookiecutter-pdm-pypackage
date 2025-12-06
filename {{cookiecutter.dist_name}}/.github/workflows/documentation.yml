@@ -27,19 +27,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '{{ cookiecutter.python_version }}'
-    - name: Install dependencies
-      uses: ./.github/actions/setup-pdm-env
-    - name: Build
-      run: pdm run docs-build
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: ./site
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '{{ cookiecutter.python_version }}'
+      - name: Install dependencies
+        uses: ./.github/actions/setup-pdm-env
+        with:
+          python-version: '{{ cookiecutter.python_version }}'
+      - name: Build
+        run: pdm run docs-build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
 
   deploy:
     environment:
@@ -51,4 +53,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

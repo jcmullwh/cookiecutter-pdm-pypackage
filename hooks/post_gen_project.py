@@ -1,116 +1,103 @@
-import os
-import sys
-import subprocess
-import platform
 import shutil
+import subprocess
+import sys
+from pathlib import Path
 
-def is_pdm_installed():
-    """Check if pdm is installed."""
-    return shutil.which("pdm") is not None
+PROJECT_ROOT = Path.cwd()
 
-def install_pdm():
-    """Install pdm using pip."""
-    print("Installing pdm...")
-    run_command([sys.executable, "-m", "pip", "install", "pdm"])
+INSTALL_PDM = "{{ cookiecutter.install_pdm }}" == "Y"
+INSTALL_DEPS = "{{ cookiecutter.install_dependencies }}" == "Y"
+INIT_GIT = "{{ cookiecutter.init_git }}" == "Y"
+INITIAL_COMMIT = "{{ cookiecutter.initial_commit }}" == "Y"
+MKDOCS_ENABLED = "{{ cookiecutter.mkdocs }}" == "Y"
+CODECOV_ENABLED = "{{ cookiecutter.codecov }}" == "Y"
 
-def is_git_installed():
-    """Check if Git is installed."""
-    return shutil.which("git") is not None
 
-def initialize_git_repo():
-    """Initialize a new Git repository."""
-    print("Initializing Git repository...")
-    run_command(["git", "init"])
+def run(command: list[str]) -> None:
+    print(f"Running command: {' '.join(command)}")
+    subprocess.run(command, check=True)
 
-def create_gitignore():
-    """Create a .gitignore file with common Python and PDM exclusions."""
-    gitignore_content = """
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
 
-# Virtual environment
-.env/
-venv/
-ENV/
-env/
-.venv/
+def safe(label: str, func) -> None:
+    try:
+        func()
+    except subprocess.CalledProcessError as exc:
+        print(f"{label} failed: {exc}. Continuing without stopping project generation.")
 
-# PDM specific
-__pypackages__/
-pdm.lock
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-.eggs/
+def remove_path(path: Path) -> None:
+    if path.is_dir():
+        shutil.rmtree(path)
+        print(f"Removed directory {path}")
+    elif path.exists():
+        path.unlink()
+        print(f"Removed file {path}")
 
-# IDEs and editors
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
 
-# OS files
-.DS_Store
-Thumbs.db
-"""
-    gitignore_path = os.path.join(os.getcwd(), ".gitignore")
-    if not os.path.exists(gitignore_path):
-        print("Creating .gitignore file...")
-        with open(gitignore_path, "w") as f:
-            f.write(gitignore_content.strip() + "\n")
-    else:
-        print(".gitignore already exists. Skipping creation.")
+def cleanup_features() -> None:
+    if not MKDOCS_ENABLED:
+        for path in [
+            PROJECT_ROOT / "mkdocs.yml",
+            PROJECT_ROOT / "docs",
+            PROJECT_ROOT / ".github" / "workflows" / "documentation.yml",
+        ]:
+            remove_path(path)
+    if not CODECOV_ENABLED:
+        remove_path(PROJECT_ROOT / "codecov.yaml")
 
-def make_initial_commit():
-    """Make the initial Git commit."""
-    print("Making initial Git commit...")
-    run_command(["git", "add", "."])
-    run_command(["git", "commit", "-m", "Initial commit"])
 
-def run_command(command, shell=False):
-    """Utility function to run a shell command."""
-    print(f"Running command: {' '.join(command) if isinstance(command, list) else command}")
-    subprocess.run(command, shell=shell, check=True)
-
-def main():
-    current_os = platform.system()
-    print(f"Detected OS: {current_os}")
-
-    # Ensure Git is installed
-    if not is_git_installed():
-        print("Git is not installed. Please install Git and re-run the script.")
-        sys.exit(1)
-    else:
-        print("Git is already installed.")
-
-    # Ensure PDM is installed
-    if not is_pdm_installed():
-        install_pdm()
-    else:
+def ensure_pdm() -> bool:
+    if shutil.which("pdm"):
         print("pdm is already installed.")
+        return True
+    if not INSTALL_PDM:
+        print("pdm is not installed and install_pdm is disabled; skipping.")
+        return False
+    print("Installing pdm with --user...")
+    run([sys.executable, "-m", "pip", "install", "--user", "pdm"])
+    return True
 
-    # Install project dependencies
-    run_command(["pdm", "install"])
 
-    # Add the current project as an editable dev dependency
-    run_command(["pdm", "add", "--dev", "--editable", "."])
+def install_dependencies() -> None:
+    if not INSTALL_DEPS:
+        print("Dependency installation skipped (install_dependencies=N).")
+        return
+    if not shutil.which("pdm"):
+        if not ensure_pdm():
+            print("Could not install dependencies because pdm is unavailable.")
+            return
+    run(["pdm", "install"])
 
-    # Initialize Git repository
-    # Check if the current directory is already a Git repository
-    if not os.path.isdir(os.path.join(os.getcwd(), ".git")):
-        initialize_git_repo()
-        create_gitignore()
-        make_initial_commit()
+
+def init_git_repo() -> None:
+    if not INIT_GIT:
+        print("Git initialization skipped (init_git=N).")
+        return
+    if not shutil.which("git"):
+        print("Git is not installed; skipping git setup.")
+        return
+    if (PROJECT_ROOT / ".git").is_dir():
+        print("Repository already initialized; skipping git init.")
     else:
-        print("Git repository already initialized. Skipping Git setup.")
+        run(["git", "init"])
+    if INITIAL_COMMIT:
+        run(["git", "add", "."])
+        run(["git", "commit", "-m", "Initial commit"])
+
+
+def main() -> None:
+    cleanup_features()
+    if INSTALL_PDM:
+        safe("PDM installation", ensure_pdm)
+    safe("Dependency installation", install_dependencies)
+    if INITIAL_COMMIT and not INIT_GIT:
+        print("Initial commit requested but init_git is disabled; skipping commit.")
+    safe("Git initialization", init_git_repo)
+
 
 if __name__ == "__main__":
     try:
         main()
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
+    except subprocess.CalledProcessError as exc:
+        print(f"An error occurred: {exc}")
+        sys.exit(exc.returncode)
