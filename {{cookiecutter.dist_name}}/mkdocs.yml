@@ -49,8 +49,9 @@ plugins:
     - mkdocstrings:
         handlers:
             python:
-                import:
-                    - https://docs.python.org/{{ cookiecutter.python_version }}/objects.inv
+                inventories:
+                    - url: https://docs.python.org/{{ cookiecutter.python_version }}/objects.inv
+                      base_url: https://docs.python.org/{{ cookiecutter.python_version }}/
                 options:
                     docstring_style: google
 
