@@ -6,6 +6,7 @@
     "dist_name": "{{cookiecutter.project_name.lower().replace(' ', '_')}}",
     "package_name": "{{cookiecutter.dist_name.replace('-', '_')}}",
     "project_short_description": "",
+    "version": "0.1.0",
     "repository_name": "{{cookiecutter.github_username}}/{{cookiecutter.dist_name}}",
     "repository_url": "https://github.com/{{cookiecutter.repository_name}}",
     "docs_url": "https://{{cookiecutter.github_username}}.github.io/{{cookiecutter.dist_name}}/",
