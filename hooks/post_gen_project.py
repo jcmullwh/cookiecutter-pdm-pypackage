@@ -89,10 +89,10 @@ def main() -> None:
     cleanup_features()
     if INSTALL_PDM:
         safe("PDM installation", ensure_pdm)
-    safe("Dependency installation", install_dependencies)
     if INITIAL_COMMIT and not INIT_GIT:
         print("Initial commit requested but init_git is disabled; skipping commit.")
     safe("Git initialization", init_git_repo)
+    safe("Dependency installation", install_dependencies)
 
 
 if __name__ == "__main__":
