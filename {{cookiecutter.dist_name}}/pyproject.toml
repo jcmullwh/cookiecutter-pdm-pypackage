@@ -21,6 +21,7 @@ Source = "{{ cookiecutter.repository_url }}"
 
 [tool.pdm.version]
 source = "scm"
+fallback_version = "0.0.0"
 
 
 [tool.mypy]
