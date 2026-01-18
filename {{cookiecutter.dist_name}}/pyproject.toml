@@ -127,6 +127,8 @@ test-cov-xml = "pytest --cov-report=xml"
 {%- endif %}
 lint = "scripts/lint.py"
 lint-check = "scripts/lint-check.py"
+snapshot-diff = "scripts/snapshot.py diff"
+snapshot-zip = "scripts/snapshot.py snapshot"
 {% if cookiecutter.mkdocs == "Y" -%}
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"

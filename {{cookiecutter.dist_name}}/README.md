@@ -96,10 +96,13 @@ test-cov-xml: Runs tests with coverage report in XML format.
 {%- endif %}
 lint: Applies linting and type checking.
 lint-check: Checks linting without making changes.
+snapshot-diff: Saves a working tree diff to _artifacts/working-tree.diff.
+snapshot-zip: Saves a zip snapshot to _artifacts/repo-snapshot.zip.
 {% if cookiecutter.mkdocs == "Y" -%}
 docs-serve: Serves the documentation locally.
 docs-build: Builds the static documentation site.
 {%- endif %}
+Artifacts in _artifacts/ are overwritten on each run.
 You can execute any of these scripts using:
 ```
 pdm run <script-name>
@@ -111,4 +114,3 @@ pdm run lint
 
 ### License
 This project is licensed under the terms of the {{cookiecutter.open_source_license}}
-
