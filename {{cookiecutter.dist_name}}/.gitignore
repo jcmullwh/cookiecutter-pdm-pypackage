@@ -113,3 +113,6 @@ ENV/
 
 # ruff
 .ruff_cache/*
+
+# Snapshot artifacts
+/_artifacts/
