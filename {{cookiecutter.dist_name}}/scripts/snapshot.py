@@ -86,9 +86,6 @@ def main():
         write_diff(root, output_dir)
     elif args.command == "snapshot":
         write_snapshot(root, output_dir)
-    else:
-        logging.error("Unknown command: %s", args.command)
-        sys.exit(1)
 
 
 if __name__ == "__main__":
